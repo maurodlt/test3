@@ -1,7 +1,7 @@
 services:
   # Backend API (Free tier - 750 hours/month, spins down after 15 min idle)
   - type: web
-    name: test3-backend-a40c3f
+    name: test3-backend-8c3543
     runtime: python
     plan: free
     buildCommand: pip install -r backend/requirements.txt
@@ -14,13 +14,13 @@ services:
 
   # Frontend (Free static site)
   - type: web
-    name: test3-frontend-a40c3f
+    name: test3-frontend-8c3543
     runtime: static
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/build
     envVars:
       - key: VITE_API_URL
-        value: https://test3-backend-a40c3f.onrender.com
+        value: https://test3-backend-8c3543.onrender.com
     headers:
       - path: /assets/*.js
         name: Content-Type

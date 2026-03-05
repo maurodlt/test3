@@ -15,23 +15,23 @@ class Base(DeclarativeBase):
 
 
 # Tables definition for many-to-many relationships
-publication_institution = Table(
-    "publication_institution",
-    Base.metadata,
-    Column("institution_1", ForeignKey("institution.id"), primary_key=True),
-    Column("publication", ForeignKey("publication.id"), primary_key=True),
-)
 author_institution = Table(
     "author_institution",
     Base.metadata,
-    Column("author", ForeignKey("author.id"), primary_key=True),
     Column("institution", ForeignKey("institution.id"), primary_key=True),
+    Column("author", ForeignKey("author.id"), primary_key=True),
 )
 author_publication = Table(
     "author_publication",
     Base.metadata,
-    Column("author_1", ForeignKey("author.id"), primary_key=True),
     Column("publication_1", ForeignKey("publication.id"), primary_key=True),
+    Column("author_1", ForeignKey("author.id"), primary_key=True),
+)
+publication_institution = Table(
+    "publication_institution",
+    Base.metadata,
+    Column("publication", ForeignKey("publication.id"), primary_key=True),
+    Column("institution_1", ForeignKey("institution.id"), primary_key=True),
 )
 
 # Tables definition
@@ -45,8 +45,8 @@ class Institution(Base):
 class Author(Base):
     __tablename__ = "author"
     id: Mapped[int] = mapped_column(primary_key=True)
-    last_name: Mapped[str] = mapped_column(String(100))
     name: Mapped[str] = mapped_column(String(100))
+    last_name: Mapped[str] = mapped_column(String(100))
 
 class Publication(Base):
     __tablename__ = "publication"
@@ -138,8 +138,8 @@ class Journal(Publication):
 
 
 #--- Relationships of the institution table
-Institution.author: Mapped[List["Author"]] = relationship("Author", secondary=author_institution, back_populates="institution")
 Institution.publication: Mapped[List["Publication"]] = relationship("Publication", secondary=publication_institution, back_populates="institution_1")
+Institution.author: Mapped[List["Author"]] = relationship("Author", secondary=author_institution, back_populates="institution")
 
 #--- Relationships of the author table
 Author.institution: Mapped[List["Institution"]] = relationship("Institution", secondary=author_institution, back_populates="author")
